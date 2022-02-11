@@ -10,8 +10,8 @@
 import tkinter as tk
 import random as rd
 
-H = 100
-W = 100
+H = 500
+W = 500
 
 def creation_random () :
     Config_random= [[], [], []]
@@ -22,4 +22,11 @@ def creation_random () :
     return(Config_random)
 
 racine=tk.Tk()
-canvas=tk.Canvas(racine, height=H, widht=W)
+canvas=tk.Canvas(racine, height=H, width=W, relief="ridge",borderwidth=3)
+Bouton= tk.Button(racine, padx=20,font=("lines","10"),text="...",relief="ridge",borderwidth=3)
+
+canvas.grid(column=1,row=0)
+Bouton.grid(column=0,row=0,rowspan=1)
+
+racine.mainloop()
+
