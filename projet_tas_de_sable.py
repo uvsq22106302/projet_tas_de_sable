@@ -14,6 +14,3 @@ W = 100
 
 racine=tk.Tk()
 canvas=tk.Canvas(racine, height=H, widht=W)
-udizgcukzcgqc
-
-
