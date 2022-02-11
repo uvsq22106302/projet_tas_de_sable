@@ -9,6 +9,9 @@
 
 import tkinter as tk
 
+H = 100
+W = 100
+
 racine=tk.Tk()
 canvas=tk.Canvas(racine, height=H, widht=W)
 
