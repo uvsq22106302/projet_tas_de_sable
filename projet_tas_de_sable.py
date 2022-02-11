@@ -5,7 +5,12 @@
 # Bryan LE BLANC
 # Kais CHEBOUB
 # https://github.com/uvsq22106302/projet_tas_de_sable
-#######################################
-from tkinter import *
+####################################### 
+import tkinter as tk
+
+
+racine=tk.Tk()
+canvas=tk.Canvas(racine,height=H,widht=W)
+
 
 
