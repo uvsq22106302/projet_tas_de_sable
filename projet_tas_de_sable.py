@@ -10,7 +10,7 @@
 import tkinter as tk
 import random as rd
 
-taille = 100
+taille = 10
 
 def get_color(r, g, b):
     """ Retourne une couleur à partir de ses composantes r, g, b"""
@@ -37,7 +37,7 @@ def aleatoire ():
 
 config_courante(taille)
 racine = tk.Tk()
-coeff = (min(racine.winfo_screenwidth(), racine.winfo_screenheight()) - 100) / taille
+coeff = (min(racine.winfo_screenwidth(), racine.winfo_screenheight())/1.2) / taille
 canvas = tk.Canvas(racine, height = taille * coeff, width = taille * coeff)
 canvas.grid(column = 1, row = 0)
 bouton = tk.Button(racine, text = "Configuration aléatoire", command = aleatoire)
