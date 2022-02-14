@@ -17,13 +17,11 @@ def get_color(r, g, b):
     return '#{:02x}{:02x}{:02x}'.format(r, g, b)
 
 def maj ():
-    global config
-    global L_obj
     for i in range (taille):
         for j in range (taille):
                 canvas.itemconfigure(L_obj[i][j], fill = get_color(255, (config[i][j]) * (255 // 3), 0))
 
-def config_courante (taille):
+def config_courante ():
     global config
     global L_obj
     config = [[0] * taille for i in range(taille)]
@@ -35,7 +33,7 @@ def aleatoire ():
             config[i][j] = rd.randint(0, 3)
     maj()
 
-config_courante(taille)
+config_courante()
 racine = tk.Tk()
 coeff = (min(racine.winfo_screenwidth(), racine.winfo_screenheight())/1.2) / taille
 canvas = tk.Canvas(racine, height = taille * coeff, width = taille * coeff)
