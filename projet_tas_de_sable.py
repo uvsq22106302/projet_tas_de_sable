@@ -16,27 +16,30 @@ import random as rd
 #Constantes
 #taille de la grille
 taille = 9
-#delai d'affichage entre chaque changement de couleur des cases pendant l'iteration
-delai = 100
+#delai d'affichage entre chaque changement de couleur de chaque case pendant l'iteration
+delai = 50
 
 ###############################################################################################################################################
 #Variables globales
 L_coul = ["black", "yellow", "green", "blue", "white", "red", "magenta", "cyan"]
 stop = 0
-i0 = 0
-j0 = 0
 
 ###############################################################################################################################################
 #Fonctions
 def maj ():
     """
-    Met à jour les couleurs des carrés et réactive le bouton de lancement de l'itération
+    Met à jour la couleur de tous carrés
     """
-    bouton_iter.config(state = tk.NORMAL)
     for i in range (taille):
         for j in range (taille):
                 canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]])
-    racine.after(delai,racine.update())
+
+def maj_unique(i,j):
+    """
+    Mat à jour la couleur du carré en position (i, j) en actualisant l'affichage juste après
+    """
+    canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]])
+    racine.after(delai, racine.update())
 
 def config_alea ():
     """
@@ -59,57 +62,48 @@ def config_iden ():
 def config_save ():
     pass
 
-def iteration ():
+def iteration():
     """
-    - Si c'est la première fois que le bouton bouton_iter est cliqué :
-      Lance l'itération et modifie le texte du bouton en "Mettre en pause l'itération".
-    - Si c'est la deuxième fois que le bouton est cliqué :
-      Stoppe l'itération et modifie le texte du bouton en "Reprendre l'itération".
-    - Si c'est la troisième fois que le bouton est cliqué :
-      Relance l'itération et modifie le texte du bouton en "Mettre en pause l'itération"
-    - Si l'itération est finie :
-      Stoppe l'iteration, modifie le texte du bouton en "Lancer l'itération" et désactive le bouton
+    Lance l'iteration en modifiant le bouton bouton_iter
+    Si la fonction arret est executée : arrêt de l'itération et modification du bouton bouton_iter
+    Si rien n'a été modifié pendant la dernière itération : arrêt de l'itération et modification du bouton bouton_iter
     """
-    global stop, i0, j0, compteur
-    bouton_iter.config(text = "Mettre en pause l'itération")
-    if stop == 0 :
-        stop = 1
-        compteur = 1
-        while compteur != 0:
-            compteur = 0
-            for i in range (i0, taille):
-                i0 = 0
-                for j in range (j0, taille):
-                    j0 = 0
-                    if config[i][j] > 3 :
-                        compteur += 1
-                        config[i][j] -= 4
-                        if i-1 > -1 :
-                            config[i-1][j] += 1
-                        if j+1 < taille :
-                            config[i][j+1] += 1
-                        if i+1 < taille :
-                            config[i+1][j] += 1
-                        if j-1 > -1 :
-                            config[i][j-1] += 1
-                        maj()
-                    if stop == 2:
-                        j0 = j
-                        break
-                if stop == 2:
-                    i0 = i
-                    break
-            if stop == 2:
-                break
-    elif stop == 1 :
-        bouton_iter.config(text = "Reprendre l'iteration")
-        stop = 2
-    elif stop == 2:
-        stop = 0
-        iteration()
-    if stop == 1 and compteur == 0:
-        bouton_iter.config(text = "Lancer l'iteration", state = tk.DISABLED)
-        stop = 0
+    global stop
+    bouton_iter.config(text = "Stopper l'itération", command = arret)
+    compteur = 0
+    for i in range (taille):
+        for j in range (taille):
+            if stop == 1:
+                bouton_iter.config(text = "Lancer l'itération", command = iteration)
+                stop = 0
+                return()
+            if config[i][j] > 3 :
+                compteur += 1
+                config[i][j] -= 4
+                maj_unique(i,j)
+                if i-1 > -1 :
+                    config[i-1][j] += 1
+                    maj_unique(i-1,j)
+                if j+1 < taille :
+                    config[i][j+1] += 1
+                    maj_unique(i,j+1)
+                if i+1 < taille :
+                    config[i+1][j] += 1
+                    maj_unique(i+1,j)
+                if j-1 > -1 :
+                    config[i][j-1] += 1
+                    maj_unique(i,j-1)
+    if compteur != 0 and stop == 0:
+        racine.after(0, iteration)
+    if compteur == 0:
+        bouton_iter.config(text = "Lancer l'itération", command = iteration)
+
+def arret ():
+    """
+    Fonction qui change la variable stop en 1
+    """
+    global stop
+    stop = 1
 
 ###############################################################################################################################################
 #Partie principale
