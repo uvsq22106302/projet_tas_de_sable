@@ -28,17 +28,17 @@ stop = 0
 #Fonctions
 def maj ():
     """
-    Met à jour la couleur de tous carrés
+    Met à jour la couleur de tous les carrés
     """
     for i in range (taille):
         for j in range (taille):
-                canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]])
+                canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
 
 def maj_unique(i,j):
     """
     Mat à jour la couleur du carré en position (i, j) en actualisant l'affichage juste après
     """
-    canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]])
+    canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
     racine.after(delai, racine.update())
 
 def config_alea ():
@@ -47,7 +47,7 @@ def config_alea ():
     """
     for i in range (taille):
         for j in range (taille):
-            config[i][j] = rd.randint(0, 4)
+            config[i][j] = rd.randint(0, 3)
     maj()
 
 def config_pile ():
@@ -137,7 +137,7 @@ config = [[0] * taille for i in range(taille)]
 L_obj = [[] * taille for i in range(taille)]
 for i in range (taille) :
     for j in range (taille) :
-        L_obj[i] += [canvas.create_rectangle((i * coeff, j * coeff), ((i+1) * coeff, (j+1) * coeff), fill = "white")]
+        L_obj[i] += [canvas.create_rectangle((i * coeff, j * coeff), ((i+1) * coeff, (j+1) * coeff), fill = "black", outline = "black")]
 maj()
 
 #Boucle principale
