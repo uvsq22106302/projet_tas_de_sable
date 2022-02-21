@@ -9,19 +9,23 @@
 
 ###############################################################################################################################################
 #Importation des modules
+
 import tkinter as tk
 import random as rd
 
 ###############################################################################################################################################
 #Constantes
+
 #taille de la grille
 taille = 9
+
 #delai d'affichage entre chaque changement de couleur de chaque case pendant l'iteration
 delai = 50
 
 ###############################################################################################################################################
 #Variables globales
-L_coul = ["black", "yellow", "green", "blue", "white", "red", "magenta", "cyan"]
+
+L_coul = ["black", "red", "green", "blue", "white", "yellow", "cyan", "magenta"]
 stop = 0
 
 ###############################################################################################################################################
@@ -76,7 +80,7 @@ def iteration():
             if stop == 1:
                 bouton_iter.config(text = "Lancer l'itération", command = iteration)
                 stop = 0
-                return()
+                return
             if config[i][j] > 3 :
                 compteur += 1
                 config[i][j] -= 4
