@@ -17,33 +17,30 @@ import random as rd
 #Constantes
 
 #taille de la grille
-taille = 9
+taille = 5
 
 #delai d'affichage entre chaque changement de couleur de chaque case pendant l'iteration
-delai = 50
+delai = 100
+
+#liste des couleurs des carrés, si il y a i grains de sable dans une case alors la couleur sera L_coul[i]
+L_coul = ["black", "red", "green", "blue", "white", "yellow", "cyan", "magenta"]
 
 ###############################################################################################################################################
 #Variables globales
 
-L_coul = ["black", "red", "green", "blue", "white", "yellow", "cyan", "magenta"]
 stop = 0
 
 ###############################################################################################################################################
 #Fonctions
-def maj ():
-    """
-    Met à jour la couleur de tous les carrés
-    """
-    for i in range (taille):
-        for j in range (taille):
-                canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
 
-def maj_unique(i,j):
-    """
-    Mat à jour la couleur du carré en position (i, j) en actualisant l'affichage juste après
-    """
-    canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
-    racine.after(delai, racine.update())
+def init ():
+    global config
+    global L_obj
+    config = [[0] * taille for i in range(taille)]
+    L_obj = [[] * taille for i in range(taille)]
+    for i in range (taille) :
+        for j in range (taille) :
+            L_obj[i] += [canvas.create_rectangle((i * coeff, j * coeff), ((i+1) * coeff, (j+1) * coeff), fill = L_coul[0], outline = L_coul[0])]
 
 def config_alea ():
     """
@@ -52,7 +49,7 @@ def config_alea ():
     for i in range (taille):
         for j in range (taille):
             config[i][j] = rd.randint(0, 3)
-    maj()
+            canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
 
 def config_pile ():
     pass
@@ -63,8 +60,28 @@ def config_max ():
 def config_iden ():
     pass
 
+def sauvegarde ():
+    file = open("sauvegarde.txt", "w")
+    file.write(str(taille) + "\n")
+    for i in range (taille):
+        for j in range (taille):
+            file.write(str(config[i][j]) + "\n")
+    file.close()
+
 def config_save ():
-    pass
+    global taille, coeff
+    file = open("sauvegarde.txt", "r")
+    taille = int(file.readline())
+    coeff = (min(racine.winfo_screenwidth(), racine.winfo_screenheight())/1.2) / taille
+    init()
+    i = j = 0
+    for ligne in file:
+        config[i][j] = int(ligne)
+        canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
+        j += 1
+        if j == taille:
+            j = 0
+            i += 1
 
 def iteration():
     """
@@ -84,19 +101,20 @@ def iteration():
             if config[i][j] > 3 :
                 compteur += 1
                 config[i][j] -= 4
-                maj_unique(i,j)
+                canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
                 if i-1 > -1 :
                     config[i-1][j] += 1
-                    maj_unique(i-1,j)
+                    canvas.itemconfigure(L_obj[i-1][j], fill = L_coul[config[i-1][j]], outline = L_coul[config[i-1][j]])
                 if j+1 < taille :
                     config[i][j+1] += 1
-                    maj_unique(i,j+1)
+                    canvas.itemconfigure(L_obj[i][j+1], fill = L_coul[config[i][j+1]], outline = L_coul[config[i][j+1]])
                 if i+1 < taille :
                     config[i+1][j] += 1
-                    maj_unique(i+1,j)
+                    canvas.itemconfigure(L_obj[i+1][j], fill = L_coul[config[i+1][j]], outline = L_coul[config[i+1][j]])
                 if j-1 > -1 :
                     config[i][j-1] += 1
-                    maj_unique(i,j-1)
+                    canvas.itemconfigure(L_obj[i][j-1], fill = L_coul[config[i][j-1]], outline = L_coul[config[i][j-1]])
+    racine.after(delai, racine.update())
     if compteur != 0 and stop == 0:
         racine.after(0, iteration)
     if compteur == 0:
@@ -125,7 +143,8 @@ bouton_pile = tk.Button(racine, text = "Configuration Pile centrée", command = 
 bouton_max = tk.Button(racine, text = "Configuration Max Stable", command = config_max)
 bouton_iden = tk.Button(racine, text = "Configuration Identity", command = config_iden)
 bouton_save = tk.Button(racine, text = "Configuration sauvegardée", command = config_save)
-bouton_iter = tk.Button(racine, text = "Lancer l'itération", command = iteration, state = tk.NORMAL)
+bouton_iter = tk.Button(racine, text = "Lancer l'itération", command = iteration)
+bouton_sauv = tk.Button(racine, text = 'Sauvegarder la configuration actuelle', command = sauvegarde)
 
 #Placement des widgets
 canvas.pack(side = "right")
@@ -135,14 +154,10 @@ bouton_max.pack(side = "top", fill = "x")
 bouton_iden.pack(side = "top", fill = "x")
 bouton_save.pack(side = "top", fill = "x")
 bouton_iter.pack(side = "bottom", fill = "x")
+bouton_sauv.pack(side = "bottom", fill = "x")
 
 #Initialisation
-config = [[0] * taille for i in range(taille)]
-L_obj = [[] * taille for i in range(taille)]
-for i in range (taille) :
-    for j in range (taille) :
-        L_obj[i] += [canvas.create_rectangle((i * coeff, j * coeff), ((i+1) * coeff, (j+1) * coeff), fill = "black", outline = "black")]
-maj()
+init()
 
 #Boucle principale
 racine.mainloop()
