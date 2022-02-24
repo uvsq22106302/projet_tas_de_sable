@@ -58,7 +58,7 @@ def config_alea ():
     """
     for i in range (taille):
         for j in range (taille):
-            config[i][j] = rd.randint(0, 4)
+            config[i][j] = rd.randint(0, 3)
             canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
 
 def config_pile ():
