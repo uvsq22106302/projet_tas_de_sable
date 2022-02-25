@@ -16,7 +16,7 @@ import random as rd
 ###############################################################################################################################################
 #Constantes
 
-#taille de la grille
+#taille de base de la grille
 taille = 9
 
 #delai d'affichage entre chaque changement de couleur de chaque case pendant l'iteration
@@ -38,19 +38,13 @@ def init ():
     """
     Initialise la grille
     """
-    global config
-    global L_obj
+    global config, L_obj, coeff
+    coeff = (min(racine.winfo_screenwidth(), racine.winfo_screenheight())/1.2) / taille
     config = [[0] * taille for i in range(taille)]
     L_obj = [[] * taille for i in range(taille)]
     for i in range (taille) :
         for j in range (taille) :
             L_obj[i] += [canvas.create_rectangle((i * coeff, j * coeff), ((i+1) * coeff, (j+1) * coeff), fill = L_coul[0], outline = L_coul[0])]
-
-def addition ():
-    pass
-
-def soustraction ():
-    pass
 
 def config_alea ():
     """
@@ -73,25 +67,13 @@ def config_iden ():
 def config_clic():
     pass
 
-def sauvegarde ():
-    """
-    Supprime tout ce qu'il y a dans le fichier Sauvegarde.txt et sauvegarde la configuration (liste config) et la taille dans ce fichier
-    """
-    file = open("sauvegarde.txt", "w")
-    file.write(str(taille) + "\n")
-    for i in range (taille):
-        for j in range (taille):
-            file.write(str(config[i][j]) + "\n")
-    file.close()
-
 def config_save ():
     """
     Récupère la taille dans le fichier Sauvegarde.txt puis réinitialise la grille puis récupère la configuration dans Sauvegarde.txt et l'affiche sur la grille
     """
-    global taille, coeff
+    global taille
     file = open("sauvegarde.txt", "r")
     taille = int(file.readline())
-    coeff = (min(racine.winfo_screenwidth(), racine.winfo_screenheight())/1.2) / taille
     init()
     i = j = 0
     for ligne in file:
@@ -155,36 +137,80 @@ def iteration_unique():
     etape = 1
     iteration()
 
+def sauvegarde ():
+    """
+    Supprime tout ce qu'il y a dans le fichier Sauvegarde.txt et sauvegarde la configuration (liste config) et la taille dans ce fichier
+    """
+    file = open("sauvegarde.txt", "w")
+    file.write(str(taille) + "\n")
+    for i in range (taille):
+        for j in range (taille):
+            file.write(str(config[i][j]) + "\n")
+    file.close()
+
+def change_taille():
+    """
+    Créé une autre petite fenêtre avec une entrée et un label pour permetttre de saisir un entier (taille) et un lien entre la touche "Entrée" et la fonction appui
+    """
+    global taille, fen, entree_taille
+    print(taille)
+    fen = tk.Tk()
+    fen.title("Fenêtre de changement de taille")
+    entree_taille = tk.Entry(fen)
+    label = tk.Label(fen, text = "Veuillez saisir la nouvelle taille (attention, seuls les entiers sont accéptés).")
+    entree_taille.pack(side = "bottom", fill ="x")
+    label.pack(side = "top", fill = "x")
+    fen.bind("<Return>", appui)
+
+def appui (event):
+    """
+    Réinitialise la grille avec la nouvelle taille et ferme la fenetre fen
+    """
+    global taille
+    taille = int(entree_taille.get())
+    fen.destroy()
+    init()
+
+
+def addition ():
+    pass
+
+def soustraction ():
+    pass
+
 ###############################################################################################################################################
 #Partie principale
 
 #Création de la fenêtre
 racine = tk.Tk()
+racine.title("Simulation de l'écoulement du sable")
 
 #Calcul du coefficient en fonction de la taille de l'écran actuel
 coeff = (min(racine.winfo_screenwidth(), racine.winfo_screenheight())/1.2) / taille
 
 #Creation des widgets
 canvas = tk.Canvas(racine, height = taille * coeff, width = taille * coeff)
+bouton_iter = tk.Button(racine, text = "Lancer l'itération", command = iteration)
+bouton_etape = tk.Button(racine, text = "Faire une étape de l'itération", command = iteration_unique)
+bouton_sauv = tk.Button(racine, text = 'Sauvegarder la configuration actuelle', command = sauvegarde)
+bouton_taille = tk.Button(racine, text = 'Changer la taille', command = change_taille)
 bouton_aleat = tk.Button(racine, text = "Configuration aléatoire", command = config_alea)
 bouton_pile = tk.Button(racine, text = "Configuration Pile centrée", command = config_pile)
 bouton_max = tk.Button(racine, text = "Configuration Max Stable", command = config_max)
 bouton_iden = tk.Button(racine, text = "Configuration Identity", command = config_iden)
 bouton_save = tk.Button(racine, text = "Configuration sauvegardée", command = config_save)
-bouton_iter = tk.Button(racine, text = "Lancer l'itération", command = iteration)
-bouton_etape = tk.Button(racine, text = "Faire une étape de l'itération", command = iteration_unique)
-bouton_sauv = tk.Button(racine, text = 'Sauvegarder la configuration actuelle', command = sauvegarde)
 
 #Placement des widgets
 canvas.pack(side = "right")
-bouton_aleat.pack(side = "top", fill = "x")
-bouton_pile.pack(side = "top", fill ="x")
-bouton_max.pack(side = "top", fill = "x")
-bouton_iden.pack(side = "top", fill = "x")
-bouton_save.pack(side = "top", fill = "x")
-bouton_iter.pack(side = "bottom", fill = "x")
-bouton_etape.pack(side = "bottom", fill = "x")
-bouton_sauv.pack(side = "left", fill = "x")
+bouton_iter.pack(side = "top", fill = "x")
+bouton_etape.pack(side = "top", fill = "x")
+bouton_sauv.pack(side = "top", fill = "x")
+bouton_taille.pack(side = "top", fill = "x")
+bouton_save.pack(side = "bottom", fill = "x")
+bouton_iden.pack(side = "bottom", fill = "x")
+bouton_max.pack(side = "bottom", fill = "x")
+bouton_pile.pack(side = "bottom", fill ="x")
+bouton_aleat.pack(side = "bottom", fill = "x")
 
 #Initialisation
 init()
