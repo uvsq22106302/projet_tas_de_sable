@@ -153,7 +153,7 @@ def change_taille():
     Créé une autre petite fenêtre avec une entrée et un label pour permetttre de saisir un entier (taille) et un lien entre la touche "Entrée" et la fonction appui
     """
     global taille, fen, entree_taille
-    print(taille)
+
     fen = tk.Tk()
     fen.title("Fenêtre de changement de taille")
     entree_taille = tk.Entry(fen)
