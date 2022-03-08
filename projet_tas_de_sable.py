@@ -56,6 +56,9 @@ def config_alea ():
             canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
 
 def config_pile ():
+    """
+    Attribue uniquement des grains de sable à la case centrale
+    """
     for i in range (taille):
         for j in range (taille):
             config[i][j] = 0
@@ -82,9 +85,15 @@ def config_iden():     ### Configuration Identity
     
 
 def config_clic(event):
-
-    pass
+    x=event.x
+    y=event.y
+    for i in range (taille):
+        for j in range (taille):
+            config[i][j] = 0
+            canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
+    config[x][y]+=1   
     
+
 
 def config_save ():
     """
@@ -215,10 +224,12 @@ bouton_sauv = tk.Button(racine, text = 'Sauvegarder la configuration actuelle', 
 bouton_taille = tk.Button(racine, text = 'Changer la taille', command = change_taille)
 bouton_aleat = tk.Button(racine, text = "Configuration aléatoire", command = config_alea)
 bouton_pile = tk.Button(racine, text = "Configuration Pile centrée", command = config_pile)
+bouton_clic = tk.Button(racine, text= " Configuration des clics",command=lambda:config_clic(event))
 bouton_max = tk.Button(racine, text = "Configuration Max Stable", command = config_max)
 bouton_iden = tk.Button(racine, text = "Configuration Identity", command = config_iden)
 bouton_save = tk.Button(racine, text = "Configuration sauvegardée", command = config_save)
 
+canvas.bind('<Button-1>',config_clic)
 #Placement des widgets
 canvas.pack(side = "right")
 bouton_iter.pack(side = "top", fill = "x")
@@ -230,6 +241,7 @@ bouton_iden.pack(side = "bottom", fill = "x")
 bouton_max.pack(side = "bottom", fill = "x")
 bouton_pile.pack(side = "bottom", fill ="x")
 bouton_aleat.pack(side = "bottom", fill = "x")
+bouton_clic.pack(side = "bottom", fill = "x")
 
 #Initialisation
 init()
