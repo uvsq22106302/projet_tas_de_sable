@@ -56,19 +56,20 @@ def config_alea ():
             canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
 
 def config_pile ():
-    config[taille//2][taille//2]= 6
+    L_obj[taille//2][taille//2]= 6
     for i in range (taille):
         for j in range (taille):
             if config[i][j] != config[taille//2][taille//2]:
                 config[i][j] = 0
             else:
                 continue
+            canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
     init()
 
 def config_max ():          ##### configuration Max_stable qui injecte 3 grains de sable à chaque case
     for i in range(taille):     ##### i parcourt les cases
         for j in range(taille): #### j parcourt également les cases
-            config_max[i][j]=3   #### Chaque case d'index i et j, attribué la valeur 3.
+            config[i][j]=3   #### Chaque case d'index i et j, attribué la valeur 3.
     init()
 
 def config_iden(row,col):     ### Configuration Identity
