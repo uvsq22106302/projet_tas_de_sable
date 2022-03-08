@@ -84,7 +84,7 @@ def config_iden():     ### Configuration Identity
                 continue 
     
 
-def config_clic(event):
+def config_clic(event):    # En cours de finition
     x=event.x
     y=event.y
     for i in range (taille):
