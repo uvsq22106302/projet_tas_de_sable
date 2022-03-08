@@ -56,34 +56,30 @@ def config_alea ():
             canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
 
 def config_pile ():
-    L_obj[taille//2][taille//2]= 6
     for i in range (taille):
         for j in range (taille):
-            if config[i][j] != config[taille//2][taille//2]:
-                config[i][j] = 0
-            else:
-                continue
-            canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
-    init()
+            config[i][j] = 0
+    config[taille//2][taille//2]= 6
+    canvas.itemconfigure(L_obj[taille//2][taille//2], fill = L_coul[config[taille//2][taille//2]], outline = L_coul[config[taille//2][taille//2]])
 
 def config_max ():          ##### configuration Max_stable qui injecte 3 grains de sable à chaque case
     for i in range(taille):     ##### i parcourt les cases
         for j in range(taille): #### j parcourt également les cases
             config[i][j]=3   #### Chaque case d'index i et j, attribué la valeur 3.
-    init()
+            canvas.itemconfigure(L_obj[i][j], fill = L_coul[config[i][j]], outline = L_coul[config[i][j]])
 
-def config_iden(row,col):     ### Configuration Identity
-    double_max=config_max[i][j]*2  ### double max est l'addition de Max_stable ave lui meme
-    config_iden[row][col] = double_max  ### On attribue la valeur 6 à config_iden
-    quotient = divmod(config_iden[row][col],4)     ### divmod est une fonction permettant d'afficher le quotient et le reste d'une division
+def config_iden():     ### Configuration Identity
     for row in range(taille):     ### row parcourt les cases
         for col in range(taille): ### col parcourt les cases
-            if config_iden[row][col] > 3 :                                   ### si la config n'est pas stable donc >3 alors :
+            double_max=config[row][col]*2  ### double max est l'addition de Max_stable ave lui meme
+            config[row][col] = double_max  ### On attribue la valeur 6 à config_iden
+            quotient = divmod(config[row][col],4)     ### divmod est une fonction permettant d'afficher le quotient et le reste d'une division
+            if config[row][col] > 3 :                                   ### si la config n'est pas stable donc >3 alors :
                 for i,j in [(row+1,col),(row-1,col),(row,col+1),(row,col-1)]:  ### i,j parcourt les cases voisines (celle d'au dessus, en dessous,de gauche et de droite)
-                    config_iden[i][j] += quotient[0]                        #### On affecte a config_iden la valeur du quotient de divmod.
+                    config[i][j] += quotient[0]                        #### On affecte a config_iden la valeur du quotient de divmod.
             else:
-                return 
-    init()
+                continue 
+    
 
 def config_clic(event):
 
