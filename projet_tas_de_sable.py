@@ -64,7 +64,7 @@ def config_pile ():
             config[i][j] = 0
     config[taille//2][taille//2]= 6
     canvas.itemconfigure(L_obj[taille//2][taille//2], fill = L_coul[config[taille//2][taille//2]], outline = L_coul[config[taille//2][taille//2]])
-
+    init()
 def config_max ():          ##### configuration Max_stable qui injecte 3 grains de sable à chaque case
     for i in range(taille):     ##### i parcourt les cases
         for j in range(taille): #### j parcourt également les cases
