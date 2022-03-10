@@ -224,7 +224,7 @@ bouton_sauv = tk.Button(racine, text = 'Sauvegarder la configuration actuelle', 
 bouton_taille = tk.Button(racine, text = 'Changer la taille', command = change_taille)
 bouton_aleat = tk.Button(racine, text = "Configuration aléatoire", command = config_alea)
 bouton_pile = tk.Button(racine, text = "Configuration Pile centrée", command = config_pile)
-bouton_clic = tk.Button(racine, text= " Configuration des clics",command=lambda:config_clic(event))
+bouton_clic = tk.Button(racine, text= " Configuration des clics",command=lambda:config_clic("event"))
 bouton_max = tk.Button(racine, text = "Configuration Max Stable", command = config_max)
 bouton_iden = tk.Button(racine, text = "Configuration Identity", command = config_iden)
 bouton_save = tk.Button(racine, text = "Configuration sauvegardée", command = config_save)
